@@ -111,14 +111,15 @@ func (self ConfigPay) PrePayOrder() (res interface{}) {
 	}
 
 	//记录日志
-	gLog.Json("wechatPrePayOrderResponse", resPay)
+	gLog.Json("wechat.prepay.order.res", resPay)
 
 	//判断是否成功调用微信预支付接口
 	if resPay.ReturnCode == CODE_SUCCESS && resPay.ResultCode == CODE_SUCCESS {
 		switch self.TradeType {
 		case TYPE_APP:
 			res = newTwoSignApp(resPay.PrepayId)
-		case TYPE_JSAPI: //todo jsapi 二次签名实现
+		case TYPE_JSAPI:
+			res = newTwoSignJsapi(resPay.PrepayId)
 		}
 
 	}
@@ -178,7 +179,7 @@ func toSignStr(p interface{}) (signStr string) {
 		key := v.Type().Field(i).Tag.Get("xml")
 		val := v.Field(i)
 
-		if key != "sign" && key != "packageval" && val.String() != "" { //过滤sign packageval
+		if key != "-" && val.String() != "" { //过滤sign packageval
 			s := fmt.Sprintf("%s=%s", key, val.String())
 			arr = append(arr, s)
 		}
