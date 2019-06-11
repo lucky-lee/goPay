@@ -91,8 +91,35 @@ func (self *ConfigPay) SetOpenid(val string) *ConfigPay {
 	return self
 }
 
-//生成-预付订单
+//设置 交易类型 app
+func (self *ConfigPay) SetTypeApp() *ConfigPay {
+	self.TradeType = TYPE_APP
 
+	return self
+}
+
+//设置 交易类型 jsapi
+func (self *ConfigPay) SetTypeJsapi() *ConfigPay {
+	self.TradeType = TYPE_JSAPI
+
+	return self
+}
+
+//设置 交易类型 h5
+func (self *ConfigPay) SetTypeH5() *ConfigPay {
+	self.TradeType = TYPE_H5
+
+	return self
+}
+
+//设置 交易类型 native
+func (self *ConfigPay) SetTypeNative() *ConfigPay {
+	self.TradeType = TYPE_NATIVE
+
+	return self
+}
+
+//生成-预付订单
 func (self ConfigPay) PrePayOrder() (res interface{}) {
 	res = ResEmpty{}
 	self.Sign = toSign(self)  //生成签名字符串
@@ -120,6 +147,10 @@ func (self ConfigPay) PrePayOrder() (res interface{}) {
 			res = newTwoSignApp(resPay.PrepayId)
 		case TYPE_JSAPI:
 			res = newTwoSignJsapi(resPay.PrepayId)
+		case TYPE_H5: //TODO 需要实现
+
+		case TYPE_NATIVE: //TODO 需要实现
+
 		}
 
 	}
