@@ -145,14 +145,16 @@ func (self ConfigPay) CreatePayOrder() (res interface{}) {
 
 	//判断是否成功调用微信预支付接口
 	if resPay.ReturnCode == CODE_SUCCESS && resPay.ResultCode == CODE_SUCCESS {
-		switch self.TradeType {
-		case TYPE_APP:
+		switch self.Source {
+		case SOURCE_APP:
 			res = newTwoSignApp(resPay.PrepayId)
-		case TYPE_JSAPI:
+		case SOURCE_APPLET:
 			res = newTwoSignApplet(resPay.PrepayId)
-		case TYPE_H5: //TODO 需要实现
+			//case jsapi支付: //TODO 需要实现
 
-		case TYPE_NATIVE: //TODO 需要实现
+			//case h5支付: //TODO 需要实现
+
+			//case native支付: //TODO 需要实现
 
 		}
 
