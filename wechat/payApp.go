@@ -14,23 +14,22 @@ type TwoSignApp struct {
 	Partnerid  string `json:"partnerid" xml:"partnerid"`
 	Prepayid   string `json:"prepayid" xml:"prepayid"`
 	Timestamp  string `json:"timestamp" xml:"timestamp"`
-	Sign       string `json:"sign" xml:"sign"`
-	Packageval string `json:"packageval" xml:"packageval"`
+	Sign       string `json:"sign" xml:"-"`
+	Packageval string `json:"packageval" xml:"-"`
 }
 
 //生成-二次签名-配置
-func newTwoSignApp(prepayId string) TwoSignApp {
-	var b TwoSignApp
+func newTwoSignApp(prepayId string) (res TwoSignApp) {
 	pVal := "Sign=WXPay"
 
-	b.Appid = AppId()
-	b.Partnerid = MchId()
-	b.Prepayid = prepayId
-	b.Noncestr = gStr.RandStr(32)
-	b.Timestamp = fmt.Sprintf("%d", time.Now().Unix())
-	b.packAge = pVal
-	b.Packageval = pVal
-	b.Sign = toSign(b)
+	res.Appid = AppId()
+	res.Partnerid = MchId()
+	res.Prepayid = prepayId
+	res.Noncestr = gStr.RandStr(32)
+	res.Timestamp = fmt.Sprintf("%d", time.Now().Unix())
+	res.packAge = pVal
+	res.Packageval = pVal
+	res.Sign = toSign(res)
 
-	return b
+	return
 }

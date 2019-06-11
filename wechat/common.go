@@ -91,9 +91,36 @@ func (self *ConfigPay) SetOpenid(val string) *ConfigPay {
 	return self
 }
 
-//生成-预付订单
+//设置 交易类型 app
+func (self *ConfigPay) SetTypeApp() *ConfigPay {
+	self.TradeType = TYPE_APP
 
-func (self ConfigPay) PrePayOrder() (res interface{}) {
+	return self
+}
+
+//设置 交易类型 jsapi
+func (self *ConfigPay) SetTypeJsapi() *ConfigPay {
+	self.TradeType = TYPE_JSAPI
+
+	return self
+}
+
+//设置 交易类型 h5
+func (self *ConfigPay) SetTypeH5() *ConfigPay {
+	self.TradeType = TYPE_H5
+
+	return self
+}
+
+//设置 交易类型 native
+func (self *ConfigPay) SetTypeNative() *ConfigPay {
+	self.TradeType = TYPE_NATIVE
+
+	return self
+}
+
+//生成-预付订单
+func (self ConfigPay) CreatePayOrder() (res interface{}) {
 	res = ResEmpty{}
 	self.Sign = toSign(self)  //生成签名字符串
 	x, _ := xml.Marshal(self) //生成xml
@@ -111,17 +138,33 @@ func (self ConfigPay) PrePayOrder() (res interface{}) {
 	}
 
 	//记录日志
-	gLog.Json("wechatPrePayOrderResponse", resPay)
+	gLog.Json("wechat.prepay.order.res", resPay)
 
 	//判断是否成功调用微信预支付接口
 	if resPay.ReturnCode == CODE_SUCCESS && resPay.ResultCode == CODE_SUCCESS {
 		switch self.TradeType {
 		case TYPE_APP:
 			res = newTwoSignApp(resPay.PrepayId)
-		case TYPE_JSAPI: //todo jsapi 二次签名实现
+		case TYPE_JSAPI:
+			res = newTwoSignJsapi(resPay.PrepayId)
+		case TYPE_H5: //TODO 需要实现
+
+		case TYPE_NATIVE: //TODO 需要实现
+
 		}
 
 	}
+	return
+}
+
+//创建 新的支付请求
+func NewPay() (res *ConfigPay) {
+	res = &ConfigPay{}
+
+	res.AppId = AppId()
+	res.MchId = MchId()
+	res.NonceStr = gStr.RandStr(32)
+
 	return
 }
 
@@ -178,7 +221,7 @@ func toSignStr(p interface{}) (signStr string) {
 		key := v.Type().Field(i).Tag.Get("xml")
 		val := v.Field(i)
 
-		if key != "sign" && key != "packageval" && val.String() != "" { //过滤sign packageval
+		if key != "-" && val.String() != "" { //过滤sign packageval
 			s := fmt.Sprintf("%s=%s", key, val.String())
 			arr = append(arr, s)
 		}
