@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-type TwoSignJsapi struct {
+type TwoSignApplet struct {
 	AppId     string `json:"appId" xml:"appId"`         //应用id
 	NonceStr  string `json:"nonce_str" xml:"nonce_str"` //随机字符串 不长于32位
 	Package   string `json:"package" xml:"package"`     //数据包
@@ -17,7 +17,7 @@ type TwoSignJsapi struct {
 }
 
 //生成 二次签名 配置
-func newTwoSignJsapi(prepayId string) (res TwoSignJsapi) {
+func newTwoSignApplet(prepayId string) (res TwoSignApplet) {
 	res.AppId = AppId()
 	res.TimeStamp = fmt.Sprintf("%d", time.Now().Unix())
 	res.NonceStr = gStr.RandStr(32)

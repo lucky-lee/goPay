@@ -6,7 +6,7 @@ import (
 )
 
 func TestSignJsapi(t *testing.T) {
-	res := newTwoSignJsapi("test")
+	res := newTwoSignApplet("test")
 	bs, _ := json.Marshal(res)
 
 	t.Log(string(bs))

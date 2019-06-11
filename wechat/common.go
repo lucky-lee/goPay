@@ -47,6 +47,9 @@ type ConfigPay struct {
 	TimeStart string `xml:"time_start"`
 	TotalFee  string `xml:"total_fee"`  //必传-总金额
 	TradeType string `xml:"trade_type"` //必传-交易类型
+
+	//自定义字段
+	Source uint8 `xml:"-"` //来源
 }
 
 //设置-商品描述
@@ -92,28 +95,28 @@ func (self *ConfigPay) SetOpenid(val string) *ConfigPay {
 }
 
 //设置 交易类型 app
-func (self *ConfigPay) SetTypeApp() *ConfigPay {
+func (self *ConfigPay) setTypeApp() *ConfigPay {
 	self.TradeType = TYPE_APP
 
 	return self
 }
 
 //设置 交易类型 jsapi
-func (self *ConfigPay) SetTypeJsapi() *ConfigPay {
+func (self *ConfigPay) setTypeJsapi() *ConfigPay {
 	self.TradeType = TYPE_JSAPI
 
 	return self
 }
 
 //设置 交易类型 h5
-func (self *ConfigPay) SetTypeH5() *ConfigPay {
+func (self *ConfigPay) setTypeH5() *ConfigPay {
 	self.TradeType = TYPE_H5
 
 	return self
 }
 
 //设置 交易类型 native
-func (self *ConfigPay) SetTypeNative() *ConfigPay {
+func (self *ConfigPay) setTypeNative() *ConfigPay {
 	self.TradeType = TYPE_NATIVE
 
 	return self
@@ -146,7 +149,7 @@ func (self ConfigPay) CreatePayOrder() (res interface{}) {
 		case TYPE_APP:
 			res = newTwoSignApp(resPay.PrepayId)
 		case TYPE_JSAPI:
-			res = newTwoSignJsapi(resPay.PrepayId)
+			res = newTwoSignApplet(resPay.PrepayId)
 		case TYPE_H5: //TODO 需要实现
 
 		case TYPE_NATIVE: //TODO 需要实现
@@ -154,17 +157,6 @@ func (self ConfigPay) CreatePayOrder() (res interface{}) {
 		}
 
 	}
-	return
-}
-
-//创建 新的支付请求
-func NewPay() (res *ConfigPay) {
-	res = &ConfigPay{}
-
-	res.AppId = AppId()
-	res.MchId = MchId()
-	res.NonceStr = gStr.RandStr(32)
-
 	return
 }
 
