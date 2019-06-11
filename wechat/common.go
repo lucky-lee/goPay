@@ -120,7 +120,7 @@ func (self *ConfigPay) SetTypeNative() *ConfigPay {
 }
 
 //生成-预付订单
-func (self ConfigPay) PrePayOrder() (res interface{}) {
+func (self ConfigPay) CreatePayOrder() (res interface{}) {
 	res = ResEmpty{}
 	self.Sign = toSign(self)  //生成签名字符串
 	x, _ := xml.Marshal(self) //生成xml
@@ -154,6 +154,17 @@ func (self ConfigPay) PrePayOrder() (res interface{}) {
 		}
 
 	}
+	return
+}
+
+//创建 新的支付请求
+func NewPay() (res *ConfigPay) {
+	res = &ConfigPay{}
+
+	res.AppId = AppId()
+	res.MchId = MchId()
+	res.NonceStr = gStr.RandStr(32)
+
 	return
 }
 
