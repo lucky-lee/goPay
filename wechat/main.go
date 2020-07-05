@@ -9,19 +9,19 @@ import (
 
 //支付配置 -按照ascii 排序
 type ConfigPay struct {
-	AppId      string `xml:"appid"`        //必传-应用id
-	Attach     string `xml:"attach"`       //非必传-附加数据
-	Body       string `xml:"body"`         //必传-商品描述
-	Detail     string `xml:"detail"`       //非必传-商品详情
-	DeviceInfo string `xml:"device_info"`  //非必传-设备号
-	FeeType    string `xml:"fee_type"`     //非必传-标价币种 符合ISO 4217标准的三位字母代码，默认人民币：CNY
-	GoodsTag   string `xml:"goods_tag"`    //非必传-订单优惠标记，使用代金券或立减优惠功能时需要的参数
-	LimitPay   string `xml:"limit_pay"`    //非必传-上传此参数no_credit--可限制用户不能使用信用卡支付
-	MchId      string `xml:"mch_id"`       //必传-商户号
-	NonceStr   string `xml:"nonce_str"`    //必传-随机字符串
-	NotifyUrl  string `xml:"notify_url"`   //必传-通知地址
-	Openid     string `json:"openid"`      //非必传-trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识
-	OutTradeNo string `xml:"out_trade_no"` //必传-商户订单号
+	AppId      string `xml:"appid"`                //必传-应用id
+	Attach     string `xml:"attach"`               //非必传-附加数据
+	Body       string `xml:"body"`                 //必传-商品描述
+	Detail     string `xml:"detail"`               //非必传-商品详情
+	DeviceInfo string `xml:"device_info"`          //非必传-设备号
+	FeeType    string `xml:"fee_type"`             //非必传-标价币种 符合ISO 4217标准的三位字母代码，默认人民币：CNY
+	GoodsTag   string `xml:"goods_tag"`            //非必传-订单优惠标记，使用代金券或立减优惠功能时需要的参数
+	LimitPay   string `xml:"limit_pay"`            //非必传-上传此参数no_credit--可限制用户不能使用信用卡支付
+	MchId      string `xml:"mch_id"`               //必传-商户号
+	NonceStr   string `xml:"nonce_str"`            //必传-随机字符串
+	NotifyUrl  string `xml:"notify_url"`           //必传-通知地址
+	Openid     string `xml:"openid" json:"openid"` //非必传-trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识
+	OutTradeNo string `xml:"out_trade_no"`         //必传-商户订单号
 
 	//非必传-trade_type=NATIVE时，此参数必传。此参数为二维码中包含的商品ID，商户自行定义。
 	ProductId string `xml:"product_id"`
