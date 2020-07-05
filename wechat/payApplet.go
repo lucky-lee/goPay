@@ -8,7 +8,7 @@ import (
 
 type TwoSignApplet struct {
 	AppId     string `json:"appId" xml:"appId"`         //应用id
-	NonceStr  string `json:"nonce_str" xml:"nonce_str"` //随机字符串 不长于32位
+	NonceStr  string `json:"nonceStr" xml:"nonceStr"`   //随机字符串 不长于32位
 	Package   string `json:"package" xml:"package"`     //数据包
 	SignType  string `json:"signType" xml:"signType"`   //签名方式
 	TimeStamp string `json:"timeStamp" xml:"timeStamp"` //时间戳
