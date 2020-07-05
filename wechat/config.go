@@ -15,6 +15,10 @@ const (
 	TYPE_JSAPI  = "JSAPI"
 	TYPE_NATIVE = "NATIVE"
 	TYPE_H5     = "H5"
+
+	//来源
+	SOURCE_APP uint8 = iota + 1
+	SOURCE_APPLET
 )
 
 //设置 appid

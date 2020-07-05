@@ -14,8 +14,7 @@ func PayWxApp() {
 	wechat.SetApiKey("apiKey123456")
 
 	//生成预支付订单
-	res := wechat.NewPay().
-		SetTypeApp().
+	res := wechat.NewPayApp().
 		SetBody("test").
 		SetClientIp("127.0.0.1").
 		SetNotifyUrl("http://www.xxxxx.com").
@@ -33,8 +32,7 @@ func PayWxApplet() {
 	wechat.SetApiKey("apiKey123456")
 
 	//生成预支付订单
-	res := wechat.NewPay().
-		SetTypeJsapi().
+	res := wechat.NewPayApplet().
 		SetBody("test").
 		SetClientIp("127.0.0.1").
 		SetNotifyUrl("http://www.xxxxx.com").
