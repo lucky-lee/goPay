@@ -144,9 +144,9 @@ func (self ConfigPay) CreatePayOrder() (res interface{}) {
 	if resPay.ReturnCode == CODE_SUCCESS && resPay.ResultCode == CODE_SUCCESS {
 		switch self.Source {
 		case SOURCE_APP:
-			res = newTwoSignApp(resPay.PrepayId)
+			res = newTwoSignApp(self.OutTradeNo, resPay.PrepayId)
 		case SOURCE_APPLET:
-			res = newTwoSignApplet(resPay.PrepayId)
+			res = newTwoSignApplet(self.OutTradeNo, resPay.PrepayId)
 			//case jsapi支付: //TODO 需要实现
 
 			//case h5支付: //TODO 需要实现
