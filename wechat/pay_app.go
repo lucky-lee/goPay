@@ -16,7 +16,6 @@ type TwoSignApp struct {
 	Timestamp  string `json:"timestamp" xml:"timestamp"`
 	Sign       string `json:"sign" xml:"-"`
 	PackageVal string `json:"package_val" xml:"-"`
-	OrderSn    string `json:"order_sn"` //订单号
 }
 
 //生成-二次签名-配置
@@ -31,7 +30,6 @@ func newTwoSignApp(orderId, prepayId string) (res TwoSignApp) {
 	res.packAge = pVal
 	res.PackageVal = pVal
 	res.Sign = toSign(res)
-	res.OrderId = orderId
 
 	return
 }

@@ -14,7 +14,6 @@ type TwoSignApplet struct {
 	Timestamp string `json:"timestamp" xml:"timeStamp"` //时间戳
 
 	PaySign string `json:"pay_sign" xml:"-"` //
-	OrderId string `json:"order_id"`         //订单id
 }
 
 //生成 二次签名 配置
@@ -25,7 +24,6 @@ func newTwoSignApplet(orderId, prepayId string) (res TwoSignApplet) {
 	res.Package = fmt.Sprintf("prepay_id=%s", prepayId)
 	res.SignType = "MD5"
 	res.PaySign = toSign(res)
-	res.OrderId = orderId
 
 	return
 }
