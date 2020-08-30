@@ -146,7 +146,7 @@ func (s ConfigPay) CreatePayOrder() (res interface{}) {
 }
 
 //app 支付订单
-func (s *ConfigPay) PayAppOrder() (res TwoSignApp) {
+func (s ConfigPay) PayAppOrder() (res TwoSignApp) {
 	resPay, err := s.requestWx()
 	if err != nil {
 		gLog.E("解析json错误", err.Error())
@@ -157,7 +157,7 @@ func (s *ConfigPay) PayAppOrder() (res TwoSignApp) {
 }
 
 //小程序 支付订单
-func (s *ConfigPay) PayAppletOrder() (res TwoSignApplet) {
+func (s ConfigPay) PayAppletOrder() (res TwoSignApplet) {
 	resPay, err := s.requestWx()
 	if err != nil {
 		gLog.E("解析json错误", err.Error())
@@ -168,7 +168,7 @@ func (s *ConfigPay) PayAppletOrder() (res TwoSignApplet) {
 }
 
 //请求微信
-func (s *ConfigPay) requestWx() (res ResPay, err error) {
+func (s ConfigPay) requestWx() (res ResPay, err error) {
 	s.Sign = toSign(s)     //生成签名字符串
 	x, _ := xml.Marshal(s) //生成xml
 
