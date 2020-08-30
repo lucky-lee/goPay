@@ -16,7 +16,7 @@ type TwoSignApp struct {
 	Timestamp  string `json:"timestamp" xml:"timestamp"`
 	Sign       string `json:"sign" xml:"-"`
 	PackageVal string `json:"package_val" xml:"-"`
-	OrderId    string `json:"order_id"` //订单id
+	OrderSn    string `json:"order_sn"` //订单号
 }
 
 //生成-二次签名-配置
