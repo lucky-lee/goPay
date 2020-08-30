@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/lucky-lee/gutil/gStr"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -53,19 +54,29 @@ func toSign(b interface{}) string {
 
 //生成-签名字符串
 func toSignStr(p interface{}) (signStr string) {
-	var arr []string
+	keys := make([]string, 0)
+	val := make(map[string]string)
+	signs := make([]string, 0)
+	rVal := reflect.ValueOf(p)
 
-	v := reflect.ValueOf(p)
-	for i := 0; i < v.NumField(); i++ {
-		key := v.Type().Field(i).Tag.Get("xml")
-		val := v.Field(i)
+	for i := 0; i < rVal.NumField(); i++ {
+		field := rVal.Type().Field(i)
+		k := field.Tag.Get("xml")
+		v := rVal.Field(i)
 
-		if key != "-" && val.String() != "" { //过滤sign packageval
-			s := fmt.Sprintf("%s=%s", key, val.String())
-			arr = append(arr, s)
+		if k != "-" && v.String() != "" { //过滤sign packageval
+			val[k] = v.String()
+			keys = append(keys, k)
 		}
-
 	}
 
-	return strings.Join(arr, "&")
+	//按照ASCII从小到大排序
+	sort.Strings(keys)
+
+	for _, v := range keys {
+		sign := fmt.Sprintf("%s=%s", v, val[v])
+		signs = append(signs, sign)
+	}
+
+	return strings.Join(signs, "&")
 }

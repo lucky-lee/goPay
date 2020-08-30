@@ -120,33 +120,19 @@ func (self *ConfigPay) setTypeNative() *ConfigPay {
 }
 
 //生成-预付订单
-func (self ConfigPay) CreatePayOrder() (res interface{}) {
+func (s ConfigPay) CreatePayOrder() (res interface{}) {
 	res = ResEmpty{}
-	self.Sign = toSign(self)  //生成签名字符串
-	x, _ := xml.Marshal(self) //生成xml
-
-	//请求微信api
-	gCurl.SetContentTypeXml()
-	resStr := gCurl.RequestXml("POST", UNIFIEDORDER_URL, string(x))
-
-	//解析返回xml
-	var resPay ResPay
-	err := xml.Unmarshal([]byte(resStr), &resPay)
-
+	resPay, err := s.requestWx()
 	if err != nil { //解析错误
 		return ResEmpty{}
 	}
-
-	//记录日志
-	gLog.Json("wechat.prepay.order.res", resPay)
-
 	//判断是否成功调用微信预支付接口
 	if resPay.ReturnCode == CODE_SUCCESS && resPay.ResultCode == CODE_SUCCESS {
-		switch self.Source {
+		switch s.Source {
 		case SOURCE_APP:
-			res = newTwoSignApp(self.OutTradeNo, resPay.PrepayId)
+			res = newTwoSignApp(s.OutTradeNo, resPay.PrepayId)
 		case SOURCE_APPLET:
-			res = newTwoSignApplet(self.OutTradeNo, resPay.PrepayId)
+			res = newTwoSignApplet(s.OutTradeNo, resPay.PrepayId)
 			//case jsapi支付: //TODO 需要实现
 
 			//case h5支付: //TODO 需要实现
@@ -156,5 +142,45 @@ func (self ConfigPay) CreatePayOrder() (res interface{}) {
 		}
 
 	}
+	return
+}
+
+//app 支付订单
+func (s *ConfigPay) PayAppOrder() (res TwoSignApp) {
+	resPay, err := s.requestWx()
+	if err != nil {
+		gLog.E("解析json错误", err.Error())
+		return
+	}
+	res = newTwoSignApp(s.OutTradeNo, resPay.PrepayId)
+	return
+}
+
+//小程序 支付订单
+func (s *ConfigPay) PayAppletOrder() (res TwoSignApplet) {
+	resPay, err := s.requestWx()
+	if err != nil {
+		gLog.E("解析json错误", err.Error())
+		return
+	}
+	res = newTwoSignApplet(s.OutTradeNo, resPay.PrepayId)
+	return
+}
+
+//请求微信
+func (s *ConfigPay) requestWx() (res ResPay, err error) {
+	s.Sign = toSign(s)     //生成签名字符串
+	x, _ := xml.Marshal(s) //生成xml
+
+	//请求微信api
+	gCurl.SetContentTypeXml()
+	resStr := gCurl.RequestXml("POST", UNIFIEDORDER_URL, string(x))
+
+	//解析返回xml
+	err = xml.Unmarshal([]byte(resStr), &res)
+
+	//记录日志
+	gLog.Json("wechat.prepay.order.res", res)
+
 	return
 }

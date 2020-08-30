@@ -22,10 +22,19 @@ type Notify struct {
 }
 
 //是否成功
-func (b *Notify) IsSuccess() bool {
-	if b.ResultCode == "SUCCESS" && b.ReturnCode == "SUCCESS" {
-		return true
+func (s *Notify) IsSuccess() (status bool, msg string) {
+	sign := toSign(s)
+
+	if sign != s.Sign {
+		msg = "签名验证失败"
+		return
 	}
 
-	return false
+	if s.ResultCode == "SUCCESS" && s.ReturnCode == "SUCCESS" {
+		status = true
+		return
+	}
+
+	msg = "验证失败"
+	return
 }
