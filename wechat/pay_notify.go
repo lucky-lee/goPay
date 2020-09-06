@@ -22,7 +22,7 @@ type Notify struct {
 }
 
 //是否成功
-func (s *Notify) IsSuccess() (status bool, msg string) {
+func (s Notify) IsSuccess() (status bool, msg string) {
 	sign := toSign(s)
 
 	if sign != s.Sign {
